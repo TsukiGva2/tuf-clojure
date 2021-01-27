@@ -9,24 +9,27 @@
 (def PARSE-ERR 1)
 
 (def functions
-  #{:print #(println %)
-    :push (fn [stack value] (lifo-into stack value))
-    })
+  {"print" #(println %)
+   "push" (fn [stack value] (lifo-into stack value))
+   "drop" #(drop 1 %)
+   "rot" #(reverse (take 3 %))
+   "swap" #(reverse (take 2 %))
+   "." #()})
 
 (defn tufparse
   [expr]
 )
 
 (defn tufval
-  [expr]
+  [expr state]
   (tufrun (if (= (tufparse expr) PARSE-ERR)
-            #{:print "couldn't parse expression"}
-            (tufparse expr))))
+            {:print "couldn't parse expression"}
+            (tufparse expr)) state))
 
 (defn -main
   "tuf repl"
   [& args]
-  (loop []
+  (loop [state]
     (print "<tuf->")
     (flush)
-    (if (= (tufval (read-line)) "exit") nil (recur))))
+    (recur (tufval (read-line) state))))
