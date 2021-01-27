@@ -1,20 +1,21 @@
 # tuf
 
-FIXME: description
+Clojure implementation of the stack stuff programming language
 
 ## Installation
 
-Download from http://example.com/FIXME.
+clone this repo:
+    $ git clone https://github.com/TsukiGva2/tuf-clojure
 
 ## Usage
 
-FIXME: explanation
+Run the jar file (in the bin/ directory) with the following command:
 
-    $ java -jar tuf-0.1.0-standalone.jar [args]
+    $ java -jar tuf-0.1.0.jar [args]
 
 ## Options
 
-FIXME: listing of options this app accepts.
+...
 
 ## Examples
 
@@ -24,13 +25,7 @@ FIXME: listing of options this app accepts.
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
-
-Copyright © 2021 FIXME
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
