@@ -9,27 +9,50 @@
 (def PARSE-ERR 1)
 
 (def functions
-  {"print" #(println %)
-   "push" (fn [stack value] (lifo-into stack value))
-   "drop" #(drop 1 %)
-   "rot" #(reverse (take 3 %))
-   "swap" #(reverse (take 2 %))
-   "." #()})
+  {"emit" (fn [stack] (println (first stack)))
+   "pop"  (fn [stack] (drop 1 stack))
+   "rot"  (fn [stack] reverse (take 3 stack))
+   "swap" (fn [stack] reverse (take 2 stack))
+   "add"  (fn [stack] apply + (take 2 stack))})
 
 (defn tufparse
   [expr]
-)
+  (let [spexpr (clojure.string/split expr #" ")
+        funcs (loop [[curr & remn] spexpr
+               result []]
+          (if (and (empty? remn) (nil? curr))
+            (if (empty? result) PARSE-ERR result)
+            (recur
+             remn
+             (conj result
+                   (get functions curr curr)))))]
+    (map (fn [func]
+           (if (string? func)
+             (if (re-matches #"\".*\"" func)
+               (fn [stack]
+                 (lifo-into stack
+                  (nth
+                   (re-matches #"\"(.*)\"" func) 1)))
+               nil)
+             func))
+         funcs)))
 
 (defn tufval
   [expr state]
-  (tufrun (if (= (tufparse expr) PARSE-ERR)
-            {:print "couldn't parse expression"}
-            (tufparse expr)) state))
+  (let [funcs (filter
+         (complement nil?)
+         (tufparse expr))]
+    (loop [[curr & remn] funcs
+           stack (:stack state)]
+      (if (and (empty? remn) (nil? curr))
+        (assoc state :stack stack)
+        (recur remn (curr stack))))))
 
 (defn -main
   "tuf repl"
   [& args]
-  (loop [state]
+  (loop [state {:stack []}]
+    (println (str "stack:" (:stack state)))
     (print "<tuf->")
     (flush)
     (recur (tufval (read-line) state))))
