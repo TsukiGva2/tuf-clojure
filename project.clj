@@ -7,4 +7,6 @@
   :main ^:skip-aot tuf.core
   :target-path "bin/%s"
   :profiles {:uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]
+                       :javac-options
+                       ["-target" "8"]}})

@@ -8,12 +8,20 @@
 
 (def PARSE-ERR 1)
 
+(defn math-operation
+  [operator]
+  (fn [stack]
+    (list
+          (apply operator
+                    (map #(Integer. %) (take 2 stack))))))
+
 (def functions
   {"emit" (fn [stack] (println (first stack)))
    "pop"  (fn [stack] (drop 1 stack))
-   "rot"  (fn [stack] reverse (take 3 stack))
-   "swap" (fn [stack] reverse (take 2 stack))
-   "add"  (fn [stack] apply + (take 2 stack))})
+   "rot"  (fn [stack] (reverse (take 3 stack)))
+   "swap" (fn [stack] (reverse (take 2 stack)))
+   "add"  (math-operation +)
+   "sub"  (math-operation -)})
 
 (defn tufparse
   [expr]
@@ -51,8 +59,8 @@
 (defn -main
   "tuf repl"
   [& args]
-  (loop [state {:stack []}]
-    (println (str "stack:" (:stack state)))
+  (loop [state {:stack '()}]
+    (println "stack:" (:stack state))
     (print "<tuf->")
     (flush)
     (recur (tufval (read-line) state))))
