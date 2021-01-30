@@ -17,7 +17,7 @@ Then run the jar file in the bin/uberjar/ directory:
 
 Run the jar file (in the bin/uberjar/ directory) with the following command:
 
-    $ java -jar tuf-0.1.0.jar
+    $ java -jar tuf-0.1.0-standalone.jar
 
 ## Options
 
