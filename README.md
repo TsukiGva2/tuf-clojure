@@ -11,7 +11,7 @@ clone this repo:
 Then run the jar file in the bin/uberjar/ directory:
 
     $ cd bin/uberjar/
-    $ java -jar tuf-0.1.0.jar
+    $ java -jar tuf-0.1.0-standalone.jar
 
 ## Usage
 
