@@ -11,17 +11,24 @@
 (defn math-operation
   [operator]
   (fn [stack]
-    (list
-          (apply operator
-                    (map #(Integer. %) (take 2 stack))))))
+    (into (drop 2 stack) (list
+              (apply operator
+                     (map #(Integer. %) (take 2 stack)))))))
+
+(declare tufval)
 
 (def functions
-  {"emit" (fn [stack] (println (first stack)))
+  {"emit" (fn [stack] (println (first stack)) (drop 1 stack))
    "pop"  (fn [stack] (drop 1 stack))
-   "rot"  (fn [stack] (reverse (take 3 stack)))
-   "swap" (fn [stack] (reverse (take 2 stack)))
+   "rot"  (fn [stack] (into (drop 3 stack) (take 3 stack)))
+   "swap" (fn [stack] (into (drop 2 stack) (take 2 stack)))
    "add"  (math-operation +)
-   "sub"  (math-operation -)})
+   "sub"  (math-operation -)
+   "mul"  (math-operation *)
+   "div"  (math-operation /)
+   "dup"  (fn [stack] (conj stack (first stack)))
+   "2dup" (fn [stack] (into stack [(first (rest stack)) (first stack)]))
+   "edup" (fn [stack] (into stack [(first stack) (last stack)]))})
 
 (defn tufparse
   [expr]
